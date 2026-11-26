@@ -1,91 +1,110 @@
+# 📚 RAG Business Assistant (Ollama + ChromaDB)
 
-# 📚 RAG Business Assistant using Ollama
+A beginner-friendly, locally running document Q&A chatbot built with **Streamlit**, **Ollama**, and **ChromaDB**. Upload PDF or HTML documents, then ask questions grounded in their contents.
 
-An AI-powered document question-answering application built using Retrieval-Augmented Generation (RAG), Ollama, TinyLlama, ChromaDB and Streamlit.
+## Features
 
-## 🚀 Project Overview
+- PDF and HTML text extraction
+- Overlapping text chunking
+- Local embeddings through Ollama's `all-minilm` model
+- Persistent vector storage with ChromaDB
+- Context-grounded answers using TinyLlama
+- Source filename and page references
+- Multiple-question chat history
+- Local document processing (your files are not sent to a hosted AI API)
 
-This application allows users to upload PDF and HTML documents and ask questions about their content.
+> Scanned/image-only PDFs may not contain extractable text. OCR is not included.
 
-It retrieves relevant information from uploaded documents and uses a local LLM to generate contextual answers.
+## Requirements
 
-## 🛠️ Tech Stack
+- Python 3.10 or newer
+- [Ollama](https://ollama.com/download) installed and running
 
-- Python
-- Ollama
-- TinyLlama
-- all-MiniLM Embeddings
-- ChromaDB
-- Streamlit
-- PyPDF
-- BeautifulSoup
+## Run on Windows
 
-## 🏗️ Architecture
+Open PowerShell in the project folder.
 
-1. Upload PDF or HTML documents.
-2. Extract document text.
-3. Split text into smaller chunks.
-4. Generate embeddings using all-MiniLM.
-5. Store embeddings in ChromaDB.
-6. Retrieve relevant chunks using semantic search.
-7. Generate contextual answers using TinyLlama.
-8. Display answers through Streamlit.
+### 1. Create and activate a virtual environment
 
-## 📂 Project Structure
-
-```text
-rag-ollama-business-assistant/
-│
-├── app.py
-├── requirements.txt
-├── README.md
-├── .gitignore
-└── chroma_db/  (generated at runtime)
+```powershell
+py -m venv .venv
+.\.venv\Scripts\Activate.ps1
 ```
 
-## ⚙️ Installation
+If PowerShell blocks activation, use Command Prompt and run `.venv\Scripts\activate.bat`.
 
-### 1. Install Python dependencies
+### 2. Install dependencies
 
-```bash
+```powershell
+python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-### 2. Install Ollama
+### 3. Download the local models
 
-Download from https://ollama.com/download
+Make sure Ollama is running, then execute:
 
-### 3. Download models
-
-```bash
+```powershell
 ollama pull tinyllama
 ollama pull all-minilm
 ```
 
-### 4. Run the application
+### 4. Start the chatbot
 
-```bash
+```powershell
 streamlit run app.py
 ```
 
-Open http://localhost:8501 in your browser.
+Open the local address Streamlit displays, usually http://localhost:8501.
 
-## 💡 Example Questions
+## Run on macOS or Linux
 
-- What are some profitable business ideas?
-- What are the low-investment business opportunities?
-- Summarize the uploaded document.
-- Find online business opportunities.
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+pip install -r requirements.txt
+ollama pull tinyllama
+ollama pull all-minilm
+streamlit run app.py
+```
 
-## 🎯 Key Features
+Ensure the Ollama service is running before starting the app.
 
-- PDF and HTML document ingestion
-- Text chunking
-- Semantic embeddings
-- Vector database storage
-- Context-based question answering
-- Local LLM inference
+## How it works
 
-## 👨‍💻 Author
+1. Upload a PDF or HTML document.
+2. Extract text and split it into overlapping chunks.
+3. Ollama generates an embedding for each chunk.
+4. ChromaDB stores embeddings and metadata in `chroma_db/`.
+5. A question is embedded and matched against relevant chunks.
+6. TinyLlama generates an answer from the retrieved context with source references.
 
-Developed as a hands-on project to explore Retrieval-Augmented Generation and local AI applications.
+## Project structure
+
+```text
+rag-ollama-business-assistant/
+├── app.py
+├── requirements.txt
+├── README.md
+├── .gitignore
+└── chroma_db/          # Created automatically; not committed
+```
+
+## Troubleshooting
+
+- **Cannot connect to Ollama:** Open the Ollama app or start its service, then retry.
+- **Model not found:** Pull both models using the commands above.
+- **No readable text:** The PDF may be scanned. OCR is not included; use a text-searchable PDF.
+- **Port already in use:** Run `streamlit run app.py --server.port 8502`.
+- **Reset indexed documents:** Stop the app and remove `chroma_db/`. This deletes the local index.
+
+## Notes
+
+- Change `LLM_MODEL` in `app.py` to use another model already installed in Ollama.
+- Keep the embedding model consistent with the stored vectors. If you change `EMBED_MODEL`, clear and rebuild the index.
+- This is a learning/demo project. Independently verify important business, financial, or legal information.
+
+## Author
+
+Created by [dattasurajgs](https://github.com/dattasurajgs).
