@@ -1,9 +1,23 @@
-%%writefile /content/.gitignore
-
-venv/
+# Python
 __pycache__/
-*.pyc
+*.py[cod]
+*.pyo
+.venv/
+venv/
 .env
-*.log
+.env.*
+!.env.example
+
+# Streamlit
+.streamlit/secrets.toml
+
+# Local vector database and generated files
 chroma_db/
+*.log
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
 .ipynb_checkpoints/
