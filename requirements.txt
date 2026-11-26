@@ -1,0 +1,8 @@
+%%writefile /content/requirements.txt
+
+streamlit
+ollama
+chromadb
+pypdf
+beautifulsoup4
+requests
